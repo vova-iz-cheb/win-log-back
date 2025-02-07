@@ -41,6 +41,9 @@ fastify.register(fastifyCors, {
   origin: '*', // Можно указать определённые источники, например, ['http://localhost:3000']
 });
 
+fastify.get('/', async (request, reply) => {
+  return { message: 'API is running!' };
+});
 userRoute(fastify);
 registerRoute(fastify);
 loginRoute(fastify);
@@ -50,6 +53,7 @@ activityRoute(fastify);
 
 (async () => {
   try {
+    console.log('process.env.PORT', process.env.PORT);
     await connectToDB();
     const port =
       (typeof process.env.PORT === 'string' && +process.env.PORT) || 3000;
