@@ -22,7 +22,7 @@ const fastify = Fastify({
 const connectToDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB!, {});
-    fastify.log.info('Connected to MongoDB');
+    fastify.log.info('Connected to MongoDB:' + process.env.MONGODB);
   } catch (error) {
     fastify.log.error('Error connecting to MongoDB:', error);
     process.exit(1);
