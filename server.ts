@@ -15,57 +15,62 @@ import { activityRoute } from './routes/activity';
 // Загружаем переменные окружения из .env файла
 dotenv.config();
 
-const fastify = Fastify({
-  logger: true,
-});
+const init = () => {
+  const fastify = Fastify({
+    logger: true,
+  });
 
-// Connect to MongoDB
-const connectToDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB!, {});
-    fastify.log.info('Connected to MongoDB');
-  } catch (error) {
-    fastify.log.error('Error connecting to MongoDB:', error);
-    process.exit(1);
-  }
+  // Connect to MongoDB
+  // const connectToDB = async () => {
+  //   try {
+  //     await mongoose.connect(process.env.MONGODB!, {});
+  //     fastify.log.info('Connected to MongoDB');
+  //   } catch (error) {
+  //     fastify.log.error('Error connecting to MongoDB:', error);
+  //     process.exit(1);
+  //   }
+  // };
+
+  // Подключаем fastify-static для работы со статическими файлами
+  fastify.register(fastifyStatic, {
+    root: path.join(__dirname, 'public'),
+    prefix: '/public/',
+  });
+
+  // Регистрация плагина для CORS
+  fastify.register(fastifyCors, {
+    // Для разрешения запросов с любого источника
+    origin: '*', // Можно указать определённые источники, например, ['http://localhost:3000']
+  });
+
+  fastify.get('/', async (request, reply) => {
+    return { message: 'API is running!' };
+  });
+  userRoute(fastify);
+  registerRoute(fastify);
+  loginRoute(fastify);
+  verifyRoute(fastify);
+  habitRoute(fastify);
+  activityRoute(fastify);
+
+  return fastify;
 };
 
-// Подключаем fastify-static для работы со статическими файлами
-fastify.register(fastifyStatic, {
-  root: path.join(__dirname, 'public'),
-  prefix: '/public/',
-});
-
-// Регистрация плагина для CORS
-fastify.register(fastifyCors, {
-  // Для разрешения запросов с любого источника
-  origin: '*', // Можно указать определённые источники, например, ['http://localhost:3000']
-});
-
-fastify.get('/', async (request, reply) => {
-  return { message: 'API is running!' };
-});
-userRoute(fastify);
-registerRoute(fastify);
-loginRoute(fastify);
-verifyRoute(fastify);
-habitRoute(fastify);
-activityRoute(fastify);
-
-(async () => {
-  try {
-    await connectToDB();
-    const port =
-      (typeof process.env.PORT === 'string' && +process.env.PORT) || 3000;
-    await fastify.listen({ port, host: '0.0.0.0' });
-  } catch (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-})();
+// (async () => {
+//   try {
+//     await connectToDB();
+//     const port =
+//       (typeof process.env.PORT === 'string' && +process.env.PORT) || 3000;
+//     await fastify.listen({ port, host: '0.0.0.0' });
+//   } catch (err) {
+//     fastify.log.error(err);
+//     process.exit(1);
+//   }
+// })();
 
 //for vercel
 export default async function handler(req: any, res: any) {
+  const fastify = init();
   await fastify.ready();
   fastify.server.emit('request', req, res);
 }
