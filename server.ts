@@ -11,6 +11,7 @@ import { verifyRoute } from './routes/verify';
 import { habitRoute } from './routes/habit';
 import { activityRoute } from './routes/activity';
 
+//
 // Загружаем переменные окружения из .env файла
 dotenv.config();
 
