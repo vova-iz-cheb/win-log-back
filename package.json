@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx ts-node server.ts"
+    "start-old": "npx ts-node server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "dev": "npx ts-node server.ts"
   },
   "keywords": [],
   "author": "",
@@ -24,7 +27,6 @@
   "devDependencies": {
     "@fastify/type-provider-typebox": "5.1.0",
     "@types/bcrypt": "5.0.2",
-    "@types/fastify-static": "2.2.3",
     "@types/jsonwebtoken": "9.0.7",
     "@types/mongoose": "5.11.97",
     "@types/node": "22.10.5",
