@@ -22,7 +22,7 @@ const fastify = Fastify({
 const connectToDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB!, {});
-    fastify.log.info('Connected to MongoDB:' + process.env.MONGODB);
+    fastify.log.info('Connected to MongoDB');
   } catch (error) {
     fastify.log.error('Error connecting to MongoDB:', error);
     process.exit(1);
@@ -53,7 +53,6 @@ activityRoute(fastify);
 
 (async () => {
   try {
-    console.log('process.env.PORT', process.env.PORT);
     await connectToDB();
     const port =
       (typeof process.env.PORT === 'string' && +process.env.PORT) || 3000;
