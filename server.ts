@@ -11,11 +11,10 @@ import { verifyRoute } from './routes/verify';
 import { habitRoute } from './routes/habit';
 import { activityRoute } from './routes/activity';
 
-//
 // Загружаем переменные окружения из .env файла
 dotenv.config();
 
-const init = () => {
+export const init = () => {
   const fastify = Fastify({
     logger: true,
   });
@@ -46,6 +45,7 @@ const init = () => {
   fastify.get('/', async (request, reply) => {
     return { message: 'API is running!' };
   });
+
   userRoute(fastify);
   registerRoute(fastify);
   loginRoute(fastify);
@@ -67,10 +67,3 @@ const init = () => {
 //     process.exit(1);
 //   }
 // })();
-
-//for vercel
-export default async function handler(req: any, res: any) {
-  const fastify = init();
-  await fastify.ready();
-  fastify.server.emit('request', req, res);
-}
