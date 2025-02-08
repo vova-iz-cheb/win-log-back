@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // Require the framework
-import { init } from '../dist/server';
+import { init } from '../dist/server2';
 
 export default async (req, res) => {
   const app = init();
