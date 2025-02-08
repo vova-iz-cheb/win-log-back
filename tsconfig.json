@@ -8,7 +8,7 @@
     "skipLibCheck": true, /* Skip type checking all .d.ts files. */
     "target": "ES6",
     "module": "commonjs",
-    "outDir": "./dist",
+    "outDir": "./public",
     "rootDir": "./",
     // "typeRoots": [
     //   "./node_modules/@types"

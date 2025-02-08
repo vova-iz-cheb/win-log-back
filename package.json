@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-old": "npx ts-node server.ts",
-    "start": "node dist/server.js",
+    "start": "node public/server.js",
     "build": "tsc",
     "dev": "npx ts-node server.ts"
   },
