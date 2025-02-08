@@ -1,4 +1,10 @@
 import Fastify, { FastifyInstance } from 'fastify';
+import { userRoute } from './routes/users';
+import { registerRoute } from './routes/register';
+import { loginRoute } from './routes/login';
+import { verifyRoute } from './routes/verify';
+import { habitRoute } from './routes/habit';
+import { activityRoute } from './routes/activity';
 
 async function appRoutes(app: FastifyInstance) {
   app.get('/', () => {
@@ -10,14 +16,25 @@ async function appRoutes(app: FastifyInstance) {
 
 export function init() {
   // Instantiate Fastify with some config
-  const app = Fastify({
+  const fastify = Fastify({
     logger: true,
   });
 
   // Require the routes for the app
-  app.register(appRoutes);
+  // fastify.register(appRoutes);
 
-  return app;
+  fastify.get('/', async (request, reply) => {
+    return { message: 'API is running!' };
+  });
+
+  userRoute(fastify);
+  registerRoute(fastify);
+  loginRoute(fastify);
+  verifyRoute(fastify);
+  habitRoute(fastify);
+  activityRoute(fastify);
+
+  return fastify;
 }
 
 // Execute the app when called directly( ex.: "npm run dev")
