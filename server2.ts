@@ -6,8 +6,18 @@ import { verifyRoute } from './routes/verify';
 import { habitRoute } from './routes/habit';
 import { activityRoute } from './routes/activity';
 import fastifyCors from '@fastify/cors';
+import mongoose from 'mongoose';
 
 export function init() {
+  const connectToDB = async () => {
+    try {
+      await mongoose.connect(process.env.MONGODB!, {});
+      fastify.log.info('Connected to MongoDB');
+    } catch (error) {
+      fastify.log.error('Error connecting to MongoDB:', error);
+      process.exit(1);
+    }
+  };
   // Instantiate Fastify with some config
   const fastify = Fastify({
     logger: true,
@@ -29,6 +39,24 @@ export function init() {
   verifyRoute(fastify);
   habitRoute(fastify);
   activityRoute(fastify);
+
+  // (async () => {
+  //   try {
+  connectToDB()
+    .then(() => {
+      console.log('BD connected');
+    })
+    .catch((e) => {
+      console.log('DB error');
+    });
+  // const port =
+  //   (typeof process.env.PORT === 'string' && +process.env.PORT) || 3000;
+  // await fastify.listen({ port, host: '0.0.0.0' });
+  //   } catch (err) {
+  //     fastify.log.error(err);
+  //     process.exit(1);
+  //   }
+  // })();
 
   return fastify;
 }
