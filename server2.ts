@@ -1,18 +1,11 @@
-import Fastify, { FastifyInstance } from 'fastify';
+import Fastify from 'fastify';
 import { userRoute } from './routes/users';
 import { registerRoute } from './routes/register';
 import { loginRoute } from './routes/login';
 import { verifyRoute } from './routes/verify';
 import { habitRoute } from './routes/habit';
 import { activityRoute } from './routes/activity';
-
-async function appRoutes(app: FastifyInstance) {
-  app.get('/', () => {
-    return {
-      message: 'Hello World!123',
-    };
-  });
-}
+import fastifyCors from '@fastify/cors';
 
 export function init() {
   // Instantiate Fastify with some config
@@ -20,8 +13,11 @@ export function init() {
     logger: true,
   });
 
-  // Require the routes for the app
-  // fastify.register(appRoutes);
+  // Регистрация плагина для CORS
+  fastify.register(fastifyCors, {
+    // Для разрешения запросов с любого источника
+    origin: '*', // Можно указать определённые источники, например, ['http://localhost:3000']
+  });
 
   fastify.get('/', async (request, reply) => {
     return { message: 'API is running!' };
